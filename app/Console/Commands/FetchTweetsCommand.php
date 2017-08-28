@@ -32,7 +32,8 @@ class FetchTweetsCommand extends Command
         '#houstonrescue',
         '#houstonhelpneeded',
         '@GalvCoTX',
-        '@GalvestonOEM'
+        '@GalvestonOEM',
+        '#TXRescue'
     ];
 
     /**
