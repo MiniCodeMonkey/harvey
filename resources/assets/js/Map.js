@@ -48,7 +48,7 @@ var Map = (function () {
 				var link = 'https://twitter.com/' + result.message.user_handle + '/status/' + result.message.twitter_id;
 				var date = moment(result.message.message_created);
 
-				popupHTML += '<a href="link" target="_blank">' + link + '</a>';
+				popupHTML += '<a href="' + link + '" target="_blank">' + link + '</a>';
 				popupHTML += '<blockquote>' + result.message.message_text + '</blockquote>';
 				popupHTML += date.fromNow() + ' ' + date.format('MMMM Do YYYY, h:mm:ss a');
 
