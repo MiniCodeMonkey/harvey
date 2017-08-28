@@ -408,14 +408,8 @@ class FindAddressesCommand extends Command
         // Very crude and rudimentary right now
         $allSuffixes = array_combine(array_keys($this->suffixes), array_values($this->suffixes));
 
-        $messages = Message::all()->filter(function ($message) use ($allSuffixes) {
+        $messages = Message::doesntHave('emergencies')->get()->filter(function ($message) use ($allSuffixes) {
             $text = $message->message_text;
-
-            // Did we already flag this one?
-            $emergency = Emergency::where('message_id', $message->id)->first();
-            if ($emergency) {
-                return false;
-            }
 
             // Do we have at least 3 digits? (Could be a house number or zip code)
             if (preg_match('/([0-9]){3,}/i', $this->textWithoutHandlesAndHashtags($text))) {
@@ -429,7 +423,7 @@ class FindAddressesCommand extends Command
 
             // Start with the first number to some kind of suffix
             preg_match_all('/([0-9]){3,}(.*)?('. implode('|', $allSuffixes) .')/i', $cleanText, $matches);
-            
+
             foreach ($matches as $match) {
                 if (!isset($match[0])) {
                     continue;
