@@ -431,14 +431,33 @@ class FindAddressesCommand extends Command
             preg_match_all('/([0-9]){3,}(.*)?('. implode('|', $allSuffixes) .')/i', $cleanText, $matches);
             
             foreach ($matches as $match) {
-                $result = $this->geocode($match[0]);
-                dd($result);
+                if (!isset($match[0])) {
+                    continue;
+                }
+
+                $query = $match[0] . ' Houston TX';
+
+                $result = $this->geocode($query);
+                $firstResult = $result->results ? $result->results[0] : null;
+
+                if ($firstResult && $firstResult->accuracy > 0.8 && $firstResult->address_components->state === 'TX' && isset($firstResult->address_components->number)) {
+                    $emergency = new Emergency();
+                    $emergency->message_id = $message->id;
+                    $emergency->lat = $firstResult->location->lat;
+                    $emergency->lng = $firstResult->location->lng;
+                    $emergency->accuracy_score = $firstResult->accuracy;
+                    $emergency->accuracy_type = $firstResult->accuracy_type;
+                    $emergency->street = $firstResult->address_components->number . ' ' . $firstResult->address_components->formatted_street;
+                    $emergency->city = $firstResult->address_components->city;
+                    $emergency->zip = $firstResult->address_components->zip;
+                    $emergency->state = $firstResult->address_components->state;
+                    $emergency->save();
+                    break;
+                }
             }
 
             return $message->message_text;
         });
-
-        dd($messages->all(), $messages->count());
     }
 
     private function textWithoutHandlesAndHashtags($text) {
