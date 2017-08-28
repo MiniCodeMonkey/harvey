@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Twitter;
+use TwitterStreamingApi;
 use App\Message;
 use Carbon\Carbon;
 use PDOException;
@@ -65,39 +65,32 @@ class FetchTweetsCommand extends Command
      * @return mixed
      */
     public function handle()
-    {        
-        $query = implode(' OR ', self::SEARCH_TERMS);
-        $query .= ' -filter:retweets'; // Filter out retweets
+    {
 
-        // q: 500 characters max
-        // count: max 100 results
-        // https://dev.twitter.com/rest/reference/get/search/tweets
-        
-        $data = Twitter::getSearch([
-            'q' => $query,
-            'result_type' => 'recent',
-            'count' => 100
-        ]);
+        TwitterStreamingApi::publicStream()
+            ->whenHears(self::SEARCH_TERMS, function ($status) {
+                // Skip retweets
+                if (($status['retweeted_status'] ?? false) || mb_strpos($status['text'], 'RT ') === 0) {
+                    return;
+                }
 
-        $insertsCount = 0;
+                try {
+                    $message = new Message();
+                    $message->twitter_id = $status['id_str'];
+                    $message->message_created = Carbon::parse($status['created_at']);
+                    $message->message_text = $status['text'];
+                    $message->user_id = $status['user']['id_str'];
+                    $message->user_handle = $status['user']['screen_name'];
+                    $message->user_name = $status['user']['name'] ?? '';
+                    $message->user_location = $status['user']['location'] ?? '';
+                    $message->save();
+                } catch (PDOException $e) {
+                    $this->info('Exception: ' . $e->getMessage());
+                    // Probably duplicate key
+                }
 
-        foreach ($data->statuses as $status) {
-            try {
-                $message = new Message();
-                $message->twitter_id = $status->id_str;
-                $message->message_created = Carbon::parse($status->created_at);
-                $message->message_text = $status->text;
-                $message->user_id = $status->user->id_str;
-                $message->user_handle = $status->user->screen_name;
-                $message->user_name = $status->user->name;
-                $message->user_location = $status->user->location;
-                $message->save();
-                $insertsCount++;
-            } catch (PDOException $e) {
-                // Probably duplicate key
-            }
-        }
-
-        $this->info($insertsCount . ' new messages');
+                $this->info('1 new message: ' . $status['user']['screen_name'] . '/status/' .  $status['id_str']);
+            })
+            ->startListening();
     }
 }
