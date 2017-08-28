@@ -35,4 +35,8 @@ return [
         'secret' => env('STRIPE_SECRET'),
     ],
 
+    'geocodio' => [
+        'api_key' => env('GEOCODIO_API_KEY')
+    ]
+
 ];

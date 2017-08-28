@@ -13,7 +13,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        \App\Console\Commands\FetchTweetsCommand::class
+        \App\Console\Commands\FetchTweetsCommand::class,
+        \App\Console\Commands\FindAddressesCommand::class
     ];
 
     /**
