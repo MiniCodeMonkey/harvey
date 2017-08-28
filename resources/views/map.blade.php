@@ -16,8 +16,23 @@
     </head>
     <body>
     <div class="container-fluid">
-        <i id="loading-indicator" class="fa fa-spin fa-4x fa-refresh"></i>
-        <div id="map"></div>
+    <i id="loading-indicator" class="fa fa-spin fa-4x fa-refresh"></i>
+
+        <div class="row">
+            <div class="col-md-3">
+                @foreach (App\Emergency::getCached() as $emergency)
+                    <a href="https://twitter.com/{{ $emergency->message->user_handle }}/status/{{ $emergency->message->twitter_id }}" target="
+                    _blank">{{ $emergency->message->message_created->diffForHumans() }}</a>
+
+                    <a href="#{{ $emergency->lat }},{{ $emergency->lng }}" class="marker-link btn btn-default pull-right">
+                        <i class="fa fa-search"></i>
+                    </a>
+                    <blockquote>{{ $emergency->message->message_text }}</blockquote>
+                @endforeach
+            </div>
+            <div id="map" class="col-md-9"></div>
+        </div>
+
         <div class="panel panel-default" id="about">
             <div class="panel-body">
                 <h2>
@@ -35,7 +50,7 @@
 
                 <p>The process is currently fully automated, so at this time false positives are possible.</p>
                 
-                <p>Questions? Get in touch with us <a href="https://twitter.com/mjwhansen">@mjwhansen</a> or <a href="https://twitter.com/mathiashansen">@mathiashansen</a></p>
+                <p>Questions? Get in touch with us <a href="https://twitter.com/mjwhansen" target="_blank">@mjwhansen</a> or <a href="https://twitter.com/mathiashansen" target="_blank">@mathiashansen</a></p>
             </div>
         </div>
     </div>

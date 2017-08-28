@@ -3,12 +3,14 @@ var moment = require('moment');
 var Map = (function () {
 
 	var dataUrl, rowsCount, markers, map;
+	var markersList = [];
 	var currentRowNo = 1;
 	var header = null;
 	var importJobId = null;
 
 	function bindEvents() {
 		initializeMap();
+		initializeLinks();
 	}
 
 	function initializeMap() {
@@ -26,6 +28,16 @@ var Map = (function () {
         });
 
         fetchLocations();
+	}
+
+	function initializeLinks() {
+		$('.marker-link').click(function () {
+			var latLng = $(this).attr('href').replace('#', '');
+
+			map.setView(latLng.split(','), 13);
+
+			return false;
+		});
 	}
 
 	function fetchLocations() {
@@ -57,6 +69,7 @@ var Map = (function () {
 					minWidth: 600
 				});
 				markers.addLayer(marker);
+				markersList.push(marker);
 			}
 
 			map.addLayer(markers);

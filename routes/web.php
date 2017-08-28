@@ -16,5 +16,5 @@ Route::get('/', function () {
 });
 
 Route::get('emergencies', function () {
-	return App\Emergency::with('message')->get();
+	return App\Emergency::getCached();
 });
