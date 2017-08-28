@@ -12,5 +12,9 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('map');
+});
+
+Route::get('emergencies', function () {
+	return App\Emergency::with('message')->get();
 });
