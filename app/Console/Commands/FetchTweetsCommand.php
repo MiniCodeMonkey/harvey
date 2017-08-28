@@ -27,7 +27,10 @@ class FetchTweetsCommand extends Command
         '@fox26houston',
         '@GHC911',
         '#waterrescue',
-        '#HarveyRescue'
+        '#HarveyRescue',
+        '#houstonsos',
+        '#houstonrescue',
+        '#houstonhelpneeded'
     ];
 
     /**
