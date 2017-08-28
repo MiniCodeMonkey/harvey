@@ -12,4 +12,8 @@ class Message extends Model
     	'message_created'
     ];
 
+	protected function serializeDate(\DateTimeInterface $date) {
+		return $date->toIso8601String();
+	}
+
 }

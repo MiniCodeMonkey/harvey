@@ -15,4 +15,8 @@ class Emergency extends Model
 	public function message() {
 		return $this->belongsTo(Message::class);
 	}
+
+	protected function serializeDate(\DateTimeInterface $date) {
+		return $date->toIso8601String();
+	}
 }

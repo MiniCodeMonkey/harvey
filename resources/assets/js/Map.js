@@ -1,3 +1,5 @@
+var moment = require('moment');
+
 var Map = (function () {
 
 	var dataUrl, rowsCount, markers, map;
@@ -41,7 +43,16 @@ var Map = (function () {
 					fillOpacity: 1.0
 				});
 
-				var popupHTML = result.message.message_text;
+				var popupHTML = '';
+
+				var link = 'https://twitter.com/' + result.message.user_handle + '/status/' + result.message.twitter_id;
+				var date = moment(result.message.message_created);
+
+				popupHTML += '<a href="link" target="_blank">' + link + '</a>';
+				popupHTML += '<blockquote>' + result.message.message_text + '</blockquote>';
+				popupHTML += date.fromNow() + ' ' + date.format('MMMM Do YYYY, h:mm:ss a');
+
+
 				marker.bindPopup(popupHTML, {
 					minWidth: 600
 				});
