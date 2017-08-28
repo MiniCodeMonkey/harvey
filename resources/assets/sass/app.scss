@@ -25,4 +25,9 @@
 	top: 0;
 	width: 400px;
 	z-index: 10000;
+
+	@media only screen and (max-width: 768px) {
+		position: static;
+		width: auto;
+    }
 }
