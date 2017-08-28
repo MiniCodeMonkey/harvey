@@ -34,6 +34,8 @@
                 </ol>
 
                 <p>The process is currently fully automated, so at this time false positives are possible.</p>
+                
+                <p>Questions? Get in touch with us <a href="https://twitter.com/mjwhansen">@mjwhansen</a> or <a href="https://twitter.com/mathiashansen">@mathiashansen</a></p>
             </div>
         </div>
     </div>
