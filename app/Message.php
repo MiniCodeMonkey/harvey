@@ -16,4 +16,8 @@ class Message extends Model
 		return $date->toIso8601String();
 	}
 
+    public function emergencies() {
+        return $this->hasMany(Emergency::class);
+    }
+
 }
