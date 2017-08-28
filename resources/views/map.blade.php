@@ -18,6 +18,24 @@
     <div class="container-fluid">
         <i id="loading-indicator" class="fa fa-spin fa-4x fa-refresh"></i>
         <div id="map"></div>
+        <div class="panel panel-default" id="about">
+            <div class="panel-body">
+                <h2>
+                    What is this?
+                    <a href="https://github.com/MiniCodeMonkey/harvey/" target="_blank"><i class="fa fa-github fa-2x pull-right"></i></a>
+                </h2>
+                <p>This app was quickly put together in an effort to help locate people in need, during the devastating floods in Texas.</p>
+
+                <p>The app works as follows:</p>
+                <ol>
+                    <li>We continously monitor <a href="https://github.com/MiniCodeMonkey/harvey/blob/master/app/Console/Commands/FetchTweetsCommand.php" target="_blank">a set list of twitter handle mentions and hashtags</a></li>
+                    <li>In these messages we look for indicaters of addresses</li>
+                    <li>If an address is found, we add it to the map</li>
+                </ol>
+
+                <p>The process is currently fully automated, so at this time false positives are possible.</p>
+            </div>
+        </div>
     </div>
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js"></script>
