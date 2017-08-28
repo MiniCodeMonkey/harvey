@@ -27,12 +27,11 @@
     <body>
     <div class="container-fluid">
     <i id="loading-indicator" class="fa fa-spin fa-4x fa-refresh"></i>
-        <div class="panel panel-default" id="about">
+        <div class="panel panel-default hide" id="about">
             <div class="panel-body">
-                <h2>
-                    What is this?
-                    <a href="https://github.com/MiniCodeMonkey/harvey/" target="_blank"><i class="fa fa-github fa-2x pull-right"></i></a>
-                </h2>
+                <a href="#" class="pull-right" id="dismiss-link"><i class="fa fa-close"></i> Dismiss</a>
+                <h2>What is this?</h2>
+
                 <p>This app was quickly put together in an effort to help locate people in need, during the devastating floods in Texas.</p>
 
                 <p>The app works as follows:</p>
@@ -43,6 +42,8 @@
                 </ol>
 
                 <p>The process is currently fully automated, so at this time false positives are possible.</p>
+
+                <a href="https://github.com/MiniCodeMonkey/harvey/" target="_blank"><i class="fa fa-github fa-2x pull-right"></i></a>
                 
                 <p>Questions? Get in touch with us <a href="https://twitter.com/mjwhansen" target="_blank">@mjwhansen</a> or <a href="https://twitter.com/mathiashansen" target="_blank">@mathiashansen</a></p>
             </div>

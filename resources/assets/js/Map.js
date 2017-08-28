@@ -11,6 +11,7 @@ var Map = (function () {
 	function bindEvents() {
 		initializeMap();
 		initializeLinks();
+		initializeAbout();
 	}
 
 	function initializeMap() {
@@ -40,7 +41,26 @@ var Map = (function () {
 		});
 	}
 
+	function initializeAbout() {
+		var key = 'dismiss-about';
+		var state = localStorage.getItem(key);
+
+		if (!state) {
+			$('#about').removeClass('hide');
+		}
+
+		$('#dismiss-link').click(function () {
+			localStorage.setItem(key, 'yes');
+			$('#about').addClass('hide');
+
+			return false;
+		});
+	}
+
 	function fetchLocations() {
+		var popupMinWidth = $(window).width() < 600 ? 50 : 600;
+		console.log(popupMinWidth);
+
 		$('#loading-indicator').show();
 		$.get('/emergencies', function (results) {
 			for (var index in results) {
@@ -60,13 +80,13 @@ var Map = (function () {
 				var link = 'https://twitter.com/' + result.message.user_handle + '/status/' + result.message.twitter_id;
 				var date = moment(result.message.message_created);
 
-				popupHTML += '<a href="' + link + '" target="_blank">' + link + '</a>';
+				popupHTML += '<a href="' + link + '" target="_blank">@' + result.message.user_handle + '</a>';
 				popupHTML += '<blockquote>' + result.message.message_text + '</blockquote>';
-				popupHTML += date.fromNow() + ' ' + date.format('MMMM Do YYYY, h:mm:ss a');
+				popupHTML += date.fromNow() + ', ' + date.format('MMMM Do YYYY, h:mm:ss a');
 
 
 				marker.bindPopup(popupHTML, {
-					minWidth: 600
+					minWidth: popupMinWidth
 				});
 				markers.addLayer(marker);
 				markersList.push(marker);
