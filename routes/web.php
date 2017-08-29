@@ -19,7 +19,7 @@ Route::get('emergencies', function () {
 	return App\Emergency::getCached();
 });
 
-Route::get('emergencies.csv', function () {
+Route::get('emergencies/csv', function () {
 	$headers = [
 		'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
 		'Content-type' => 'text/csv',
