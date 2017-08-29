@@ -58,7 +58,7 @@ Route::get('emergencies/csv', function () {
 	];
 
 	$out = fopen('php://output', 'w');
-	fputcsv($out, $csvHeaderss);
+	fputcsv($out, $csvHeaders);
 
 	$callback = function() use ($rows, $out) {
 		$rows->each(function ($row) use ($out) {
