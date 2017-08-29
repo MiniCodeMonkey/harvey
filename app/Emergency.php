@@ -19,4 +19,10 @@ class Emergency extends Model
 	protected function serializeDate(\DateTimeInterface $date) {
 		return $date->toIso8601String();
 	}
+
+	public static function getCached() {
+		return cache()->remember('emergencies', 5, function () {
+			return static::with('message')->orderBy('created_at', 'DESC')->get();
+		});
+	}
 }
