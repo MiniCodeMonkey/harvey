@@ -25,7 +25,6 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('fetch:tweets')->everyMinute();
         $schedule->command('fetch:addresses')->everyFiveMinutes()->withoutOverlapping();
     }
 
