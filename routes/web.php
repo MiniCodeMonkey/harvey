@@ -20,6 +20,8 @@ Route::get('emergencies', function () {
 });
 
 Route::get('emergencies/csv', function () {
+	ini_set('memory_limit', '4096M');
+
 	$headers = [
 		'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
 		'Content-type' => 'text/csv',
