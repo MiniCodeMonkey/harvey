@@ -423,7 +423,7 @@ class FindAddressesCommand extends Command
         })->each(function ($message) use ($allSuffixes) {
             $message->is_processed = true;
             $message->save();
-            
+
             // Find address to geocode
             $cleanText = $this->textWithoutHandlesAndHashtags($message->message_text);
 
@@ -435,7 +435,7 @@ class FindAddressesCommand extends Command
                     continue;
                 }
 
-                $query = $match[0] . ' Houston TX';
+                $query = $match[0] . ' ' . $this->determineCityState($cleanText);
 
                 $result = $this->geocode($query);
                 $firstResult = $result->results ? $result->results[0] : null;
@@ -474,5 +474,13 @@ class FindAddressesCommand extends Command
         ]);
 
         return json_decode(file_get_contents('https://api.geocod.io/v1/geocode?' . $params));
+    }
+
+    private function determineCityState($text) {
+        if (Str::contains($text, 'arthur')) {
+            return 'Houston TX';
+        } else {
+            return 'Port Arthur TX';
+        }
     }
 }
