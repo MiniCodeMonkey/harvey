@@ -479,6 +479,8 @@ class FindAddressesCommand extends Command
     private function determineCityState($text) {
         if (Str::contains($text, 'arthur')) {
             return 'Houston TX';
+        } elseif (Str::contains($text, 'beaumont')) {
+            return 'Beaumont TX';
         } else {
             return 'Port Arthur TX';
         }
