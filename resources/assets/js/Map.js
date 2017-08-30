@@ -25,7 +25,8 @@ var Map = (function () {
 
         markers = L.markerClusterGroup({
         	chunkedLoading: true,
-        	disableClusteringAtZoom: 16
+        	disableClusteringAtZoom: 14,
+        	spiderfyOnMaxZoom: true
         });
 
         fetchLocations();
@@ -67,7 +68,9 @@ var Map = (function () {
 				var result = results[index];
 				var lat = result.lat;
 				var lng = result.lng;
-
+				var link = 'https://twitter.com/' + result.message.user_handle + '/status/' + result.message.twitter_id;
+				var date = moment(result.message.message_created);
+				
 				var marker = new L.CircleMarker([lat, lng], {
 					radius: 8,
 					color: 'blue',
@@ -76,9 +79,6 @@ var Map = (function () {
 				});
 
 				var popupHTML = '';
-
-				var link = 'https://twitter.com/' + result.message.user_handle + '/status/' + result.message.twitter_id;
-				var date = moment(result.message.message_created);
 
 				popupHTML += '<a href="' + link + '" target="_blank">@' + result.message.user_handle + '</a>';
 				popupHTML += '<blockquote>' + result.message.message_text + '</blockquote>';
