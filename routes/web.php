@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Http\Request;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -19,8 +21,14 @@ Route::get('emergencies', function () {
 	return App\Emergency::getCached();
 });
 
-Route::get('emergencies/csv', function () {
+Route::get('emergencies/csv', function (Request $request) {
 	ini_set('memory_limit', '4096M');
+
+	$format = $request->input('format', 'full');
+
+	if ($format !== 'full' && $format !== 'spreadsheet') {
+		return response()->json(['error' => 'Invalid format. Valid formats are "full" or "spreadsheet"'], 400);
+	}
 
 	$headers = [
 		'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
@@ -32,7 +40,23 @@ Route::get('emergencies/csv', function () {
 
 	$rows = App\Emergency::getCached();
 
-	$csvHeaders = [
+	$csvHeaders = $format === 'spreadsheet' ? [
+		'incident number',
+		'timestamp',
+		'name',
+		'address',
+		'empty',
+		'city',
+		'Zipcode',
+		'empty',
+		'latitude',
+		'longitude',
+		'empty',
+		'empty',
+		'empty',
+		'empty',
+		'Twitter message text'
+	] : [
 		'id',
 		'lat',
 		'lng',
@@ -60,9 +84,25 @@ Route::get('emergencies/csv', function () {
 	$out = fopen('php://output', 'w');
 	fputcsv($out, $csvHeaders);
 
-	$callback = function() use ($rows, $out) {
-		$rows->each(function ($row) use ($out) {
-			fputcsv($out, [
+	$callback = function() use ($rows, $out, $format) {
+		$rows->each(function ($row) use ($out, $format) {
+			fputcsv($out, $format === 'spreadsheet' ? [
+				$row->id,
+				$row->message->message_created,
+				$row->message->user_name,
+				$row->street,
+				'',
+				$row->city,
+				$row->zip,
+				'',
+				$row->lat,
+				$row->lng,
+				'',
+				'',
+				'',
+				'',
+				$row->message->message_text
+			] : [
 				$row->id,
 				$row->lat,
 				$row->lng,

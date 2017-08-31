@@ -408,7 +408,10 @@ class FindAddressesCommand extends Command
         // Very crude and rudimentary right now
         $allSuffixes = array_combine(array_keys($this->suffixes), array_values($this->suffixes));
 
-        $messages = Message::doesntHave('emergencies')->get()->filter(function ($message) use ($allSuffixes) {
+        $messages = Message::where('is_processed', false)
+        ->doesntHave('emergencies')
+        ->get()
+        ->filter(function ($message) use ($allSuffixes) {
             $text = $message->message_text;
 
             // Do we have at least 3 digits? (Could be a house number or zip code)
@@ -418,6 +421,9 @@ class FindAddressesCommand extends Command
 
             return false;
         })->each(function ($message) use ($allSuffixes) {
+            $message->is_processed = true;
+            $message->save();
+
             // Find address to geocode
             $cleanText = $this->textWithoutHandlesAndHashtags($message->message_text);
 
@@ -429,7 +435,7 @@ class FindAddressesCommand extends Command
                     continue;
                 }
 
-                $query = $match[0] . ' Houston TX';
+                $query = $match[0] . ' ' . $this->determineCityState($cleanText);
 
                 $result = $this->geocode($query);
                 $firstResult = $result->results ? $result->results[0] : null;
@@ -468,5 +474,15 @@ class FindAddressesCommand extends Command
         ]);
 
         return json_decode(file_get_contents('https://api.geocod.io/v1/geocode?' . $params));
+    }
+
+    private function determineCityState($text) {
+        if (Str::contains($text, 'arthur')) {
+            return 'Houston TX';
+        } elseif (Str::contains($text, 'beaumont')) {
+            return 'Beaumont TX';
+        } else {
+            return 'Port Arthur TX';
+        }
     }
 }

@@ -51,7 +51,7 @@
 
         <div class="row">
             <div class="col-md-3 hidden-xs hidden-sm">
-                @foreach (App\Emergency::getCached()->take(10) as $emergency)
+                @foreach (App\Emergency::getCached()->sortByDesc('message.message_created')->take(10) as $emergency)
                     <a href="https://twitter.com/{{ $emergency->message->user_handle }}/status/{{ $emergency->message->twitter_id }}" target="
                     _blank">{{ $emergency->message->message_created->diffForHumans() }}</a>
 
