@@ -25,7 +25,7 @@ var Map = (function () {
 
         markers = L.markerClusterGroup({
         	chunkedLoading: true,
-        	disableClusteringAtZoom: 13,
+        	disableClusteringAtZoom: 12,
         	spiderfyOnMaxZoom: true
         });
 
