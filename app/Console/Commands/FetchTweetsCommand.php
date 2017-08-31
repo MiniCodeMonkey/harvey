@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Str;
 use TwitterStreamingApi;
 use App\Message;
 use Carbon\Carbon;
