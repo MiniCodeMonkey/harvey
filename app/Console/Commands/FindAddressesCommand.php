@@ -477,12 +477,12 @@ class FindAddressesCommand extends Command
     }
 
     private function determineCityState($text) {
-        if (Str::contains($text, 'arthur')) {
-            return 'Houston TX';
-        } elseif (Str::contains($text, 'beaumont')) {
+        if (Str::contains($text, 'beaumont')) {
             return 'Beaumont TX';
-        } else {
+        } elseif (Str::contains($text, 'arthur')) {
             return 'Port Arthur TX';
+        } else {
+            return 'Houston TX';
         }
     }
 }
