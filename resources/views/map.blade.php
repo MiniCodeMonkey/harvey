@@ -51,6 +51,12 @@
 
         <div class="row">
             <div class="col-md-3 hidden-xs hidden-sm">
+                <ul class="list-inline">
+                    <li><i class="fa fa-circle" style="color: #ffbbbb;"></i> &lt; 90 minutes ago</i>
+                    <li><i class="fa fa-circle" style="color: #ffffbb;"></i> &lt; 24 hours ago</i>
+                    <li><i class="fa fa-circle" style="color: #bbf;"></i> &gt; 24 hours ago</i>
+                </ul>
+
                 @foreach (App\Emergency::getCached()->sortByDesc('message.message_created')->take(10) as $emergency)
                     <a href="https://twitter.com/{{ $emergency->message->user_handle }}/status/{{ $emergency->message->twitter_id }}" target="
                     _blank">{{ $emergency->message->message_created->diffForHumans() }}</a>
@@ -66,7 +72,7 @@
     </div>
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.5.0/leaflet.markercluster.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/spin.js/2.3.2/spin.min.js"></script>
     <script src="{{ mix('js/app.js') }}"></script>
     </body>

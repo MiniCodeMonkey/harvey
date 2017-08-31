@@ -18,14 +18,14 @@ var Map = (function () {
 		map = L.map('map').setView([29.813142, -95.309789], 6);
 
         L.tileLayer('https://map.geocod.io/osm/{z}/{x}/{y}.png', {
-            maxZoom: 18,
+            maxZoom: 16,
             attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
                 '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'
         }).addTo(map);
 
         markers = L.markerClusterGroup({
         	chunkedLoading: true,
-        	disableClusteringAtZoom: 14,
+        	disableClusteringAtZoom: 13,
         	spiderfyOnMaxZoom: true
         });
 
@@ -60,7 +60,6 @@ var Map = (function () {
 
 	function fetchLocations() {
 		var popupMinWidth = $(window).width() < 600 ? 50 : 600;
-		console.log(popupMinWidth);
 
 		$('#loading-indicator').show();
 		$.get('/emergencies', function (results) {
@@ -70,11 +69,18 @@ var Map = (function () {
 				var lng = result.lng;
 				var link = 'https://twitter.com/' + result.message.user_handle + '/status/' + result.message.twitter_id;
 				var date = moment(result.message.message_created);
-				
+				var minutesSinceCreated = moment().diff(date) / 1000 / 60;
+				var fillColor = '#bbf';
+				if (minutesSinceCreated < 90) {
+					fillColor = '#ffbbbb';
+				} else if (minutesSinceCreated < 60 * 24) {
+					fillColor = '#ffffbb';
+				}
+
 				var marker = new L.CircleMarker([lat, lng], {
 					radius: 8,
-					color: 'blue',
-					fillColor: '#bbf',
+					color: '#333',
+					fillColor: fillColor,
 					fillOpacity: 1.0
 				});
 
