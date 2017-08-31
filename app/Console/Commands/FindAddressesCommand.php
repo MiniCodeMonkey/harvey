@@ -444,6 +444,7 @@ class FindAddressesCommand extends Command
                 $query = $match[0] . ' ' . $this->determineCityState($cleanText);
 
                 $result = $this->geocode($query);
+                $this->info($query);
                 $firstResult = $result->results ? $result->results[0] : null;
 
                 if ($firstResult && $firstResult->accuracy > 0.8 && $firstResult->address_components->state === 'TX' && isset($firstResult->address_components->number)) {
@@ -483,9 +484,9 @@ class FindAddressesCommand extends Command
     }
 
     private function determineCityState($text) {
-        if (Str::contains($text, 'beaumont')) {
+        if (mb_stripos($text, 'beaumont') !== false) {
             return 'Beaumont TX';
-        } elseif (Str::contains($text, 'arthur')) {
+        } elseif (mb_stripos($text, 'arthur') !== false) {
             return 'Port Arthur TX';
         } else {
             return 'Houston TX';

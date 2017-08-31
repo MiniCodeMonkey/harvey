@@ -47,7 +47,7 @@ class FetchTweetsCommand extends Command
         TwitterStreamingApi::publicStream()
             ->whenHears(config('twitter.search_terms'), function ($status) {
                 // Skip retweets
-                $isRetweet = ($status['retweeted_status'] ?? false) || mb_strpos($status['text'], 'RT ') === 0;
+                $isRetweet = ($status['retweeted_status'] ?? false) || mb_stripos($status['text'], 'RT ') === 0;
                 if ($isRetweet && !Str::contains($status['text'], '#harveysos')) {
                     return; // Skip retweets that does not contain the #harveysos hashtag
                 }
