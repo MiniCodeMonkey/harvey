@@ -421,6 +421,12 @@ class FindAddressesCommand extends Command
 
             return false;
         })->each(function ($message) use ($allSuffixes) {
+            // Simple mutex, so we can run multiple concurrent instances of this command
+            $message->refresh();
+            if ($message->is_processed) {
+                return;
+            }
+
             $message->is_processed = true;
             $message->save();
 
