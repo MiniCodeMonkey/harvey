@@ -10,31 +10,6 @@ use PDOException;
 
 class FetchTweetsCommand extends Command
 {
-    const SEARCH_TERMS = [
-        '#NeedWaterRescue',
-        '#HarveySOS',
-        '@HoustonTX',
-        '@SylvesterTurner',
-        '@houstonpolice',
-        '@cohoustonfire',
-        '@HoustonOEM',
-        '@KHOU',
-        '@SheriffEd_HCSO',
-        '@TxNationalGuard',
-        '@USCG',
-        '@khou',
-        '@abc13houston',
-        '@fox26houston',
-        '@GHC911',
-        '#waterrescue',
-        '#HarveyRescue',
-        '#houstonsos',
-        '#houstonrescue',
-        '#houstonhelpneeded',
-        '@GalvCoTX',
-        '@GalvestonOEM',
-        '#TXRescue'
-    ];
 
     /**
      * The name and signature of the console command.
@@ -69,7 +44,7 @@ class FetchTweetsCommand extends Command
     {
 
         TwitterStreamingApi::publicStream()
-            ->whenHears(self::SEARCH_TERMS, function ($status) {
+            ->whenHears(config('twitter.search_terms'), function ($status) {
                 // Skip retweets
                 if (($status['retweeted_status'] ?? false) || mb_strpos($status['text'], 'RT ') === 0) {
                     return;
